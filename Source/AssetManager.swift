@@ -15,11 +15,16 @@ open class AssetManager {
 
   public static func getImage(_ name: String) -> UIImage {
     let traitCollection = UITraitCollection(displayScale: 3)
+    #if SWIFT_PACKAGE
+    // built as a Swift package, the images live in the package's resource bundle
+    let bundle: Bundle? = Bundle.module
+    #else
     var bundle = Bundle.myResourceBundle()
 
     if let resource = bundle?.resourcePath, let resourceBundle = Bundle(path: resource + "/ImagePicker.bundle") {
       bundle = resourceBundle
     }
+    #endif
 
     return UIImage(named: name, in: bundle, compatibleWith: traitCollection) ?? UIImage()
   }
